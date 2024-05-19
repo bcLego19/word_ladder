@@ -21,6 +21,12 @@ function checkGuess(wordContainer, targetWord) {
     }
 }
 
+// Function to swap the position of two word containers
+function swapWords(container1, container2) {
+    const temp = container1.parentNode.replaceChild(container2, container1);
+    container1.parentNode.insertBefore(temp, container2);
+}
+
 // Loop through each target word and create elements
 targetWords.forEach((word, index) => {
   const wordContainer = document.createElement("div");
