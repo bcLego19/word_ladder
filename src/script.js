@@ -8,14 +8,17 @@ const targetWordDisplay = document.getElementById("target-words");
 
 // Function to check user's guess for a word
 function checkGuess(wordContainer, targetWord) {
-  const guess = wordContainer.querySelectorAll("input"). // Get all input elements
-                  reduce((acc, input) => acc + input.value, ""); // Combine their values
-  if (guess === targetWord) {
-    wordContainer.classList.add("correct"); // Mark the guess as correct visually
-    targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
-  } else {
-    alert("Incorrect guess. Try again!");
-  }
+    let guess = "";
+    const inputs = wordContainer.querySelectorAll("input");
+    for (const input of inputs) {
+      guess += input.value;
+    }
+    if (guess.toUpperCase() === targetWord) {
+        wordContainer.classList.add("correct"); // Mark the guess as correct visually
+        targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
+    } else {
+        alert("Incorrect guess. Try again!");
+    }
 }
 
 // Loop through each target word and create elements
