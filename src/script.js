@@ -1,38 +1,49 @@
 // Generate target words (replace with your logic)
 const targetWords = ["POOL", "COOL", "COIL", "TOIL"];
+const hints = ["Fun with water", "Something you feel", "To wrap around", "A type of work"]; // Hint list corresponding to target words
 
-// Access the game board element from HTML
+// Access the game board and target word display elements
 const gameBoard = document.getElementById("game-board");
+const targetWordDisplay = document.getElementById("target-words");
 
-// Loop through each target word
+// Function to check user's guess for a word
+function checkGuess(wordContainer, targetWord) {
+  const guess = wordContainer.querySelectorAll("input"). // Get all input elements
+                  reduce((acc, input) => acc + input.value, ""); // Combine their values
+  if (guess === targetWord) {
+    wordContainer.classList.add("correct"); // Mark the guess as correct visually
+    targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
+  } else {
+    alert("Incorrect guess. Try again!");
+  }
+}
+
+// Loop through each target word and create elements
 targetWords.forEach((word, index) => {
-  // Create a container element for each word
   const wordContainer = document.createElement("div");
   wordContainer.classList.add("word-container");
 
-  // Display word number
   const wordNumber = document.createElement("p");
   wordNumber.textContent = `Word ${index + 1}:`;
   wordContainer.appendChild(wordNumber);
 
-  // Create individual input fields for each letter
   for (let i = 0; i < word.length; i++) {
     const letterInput = document.createElement("input");
     letterInput.type = "text";
-    letterInput.maxlength = 1; // Only allows one character
+    letterInput.maxlength = 1;
     wordContainer.appendChild(letterInput);
   }
 
-  // Add a button to check the guess (replace with functionality)
   const guessButton = document.createElement("button");
   guessButton.textContent = "Guess";
+  guessButton.addEventListener("click", () => checkGuess(wordContainer, targetWords[index])); // Call checkGuess function on click
   wordContainer.appendChild(guessButton);
 
-  // Add a button to reveal the hint (replace with functionality)
   const hintButton = document.createElement("button");
   hintButton.textContent = "Hint";
+  hintButton.addEventListener("click", () => alert(hints[index])); // Show hint on click
   wordContainer.appendChild(hintButton);
 
-  // Append the entire word container to the game board
   gameBoard.appendChild(wordContainer);
 });
+
