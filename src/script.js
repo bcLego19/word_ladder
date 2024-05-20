@@ -8,29 +8,42 @@ const targetWordDisplay = document.getElementById("target-words");
 
 // Function to check user's guess for a word
 function checkGuess(wordContainer, targetWord) {
-    let guess = "";
-    const inputs = wordContainer.querySelectorAll("input");
-    for (const input of inputs) {
-      guess += input.value;
-    }
-    if (guess.toUpperCase() === targetWord) {
-        wordContainer.classList.add("correct"); // Mark the guess as correct visually
-        targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
+  let guess = "";
+  const inputs = wordContainer.querySelectorAll("input");
+  for (const input of inputs) {
+    if (input.value) { // Check if there's a value before adding
+        if (input.value.length === 1){
+            guess += input.value;
+        } else {
+            alert("Error: Too many letters. Try again!");
+            return;
+        }
     } else {
-        alert("Incorrect guess. Try again!");
+        // Handle empty input (optional: display warning or treat as incorrect guess)
+        alert("Error: Missing letter. Try again!");
+        return;
     }
+  }
+  if (guess.toUpperCase() === targetWord) {
+    wordContainer.classList.add("correct"); // Mark the guess as correct visually
+    targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
+    document.getElementById(`guess-button-${wordContainer.dataset.index}`).disabled = true; // Disable guess button using ID
+  } else {
+    alert("Incorrect guess. Try again!");
+  }
 }
 
 // Function to swap the position of two word containers
 function swapWords(container1, container2) {
-    const temp = container1.parentNode.replaceChild(container2, container1);
-    container1.parentNode.insertBefore(temp, container2);
+  const temp = container1.parentNode.replaceChild(container2, container1);
+  container1.parentNode.insertBefore(temp, container2);
 }
 
 // Loop through each target word and create elements
 targetWords.forEach((word, index) => {
   const wordContainer = document.createElement("div");
   wordContainer.classList.add("word-container");
+  wordContainer.dataset.index = index; // Add data attribute for index
 
   const wordNumber = document.createElement("p");
   wordNumber.textContent = `Word ${index + 1}:`;
@@ -45,7 +58,8 @@ targetWords.forEach((word, index) => {
 
   const guessButton = document.createElement("button");
   guessButton.textContent = "Guess";
-  guessButton.addEventListener("click", () => checkGuess(wordContainer, targetWords[index])); // Call checkGuess function on click
+  guessButton.id = `guess-button-${index}`; // Add unique ID based on index
+  guessButton.addEventListener("click", () => checkGuess(wordContainer, targetWords[index]));
   wordContainer.appendChild(guessButton);
 
   const hintButton = document.createElement("button");
@@ -55,4 +69,3 @@ targetWords.forEach((word, index) => {
 
   gameBoard.appendChild(wordContainer);
 });
-
