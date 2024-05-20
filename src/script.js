@@ -58,6 +58,27 @@ function checkWinCondition(guessedWords) {
     }
 }
 
+function resetGame(wordContainers, guessedWords) {
+    // Reset guess inputs and visual styles
+    wordContainers.forEach(container => {
+      container.classList.remove("correct"); // Remove "correct" class
+      const inputs = container.querySelectorAll("input");
+      inputs.forEach(input => input.value = ""); // Clear input values
+    });
+    
+    // Reset guessed words array
+    guessedWords.fill(false); // Set all elements to false
+    
+    // Enable guess buttons (if needed)
+    wordContainers.forEach(container => {
+        const guessButton = container.querySelector(`button[id^="guess-button"]`); // Select button with ID starting with "guess-button-"
+        guessButton.disabled = false; // Enable guess button
+    });
+    
+    // Reset target word display (optional)
+    targetWordDisplay.textContent = ""; // Clear displayed guessed words
+}
+
 let guessedWords = new Array(targetWords.length).fill(false); // Create array with false values
 
 // Loop through each target word and create elements
@@ -89,4 +110,13 @@ targetWords.forEach((word, index) => {
   wordContainer.appendChild(hintButton);
 
   gameBoard.appendChild(wordContainer);
+});
+
+// Select the reset button
+const resetButton = document.getElementById("reset-game");
+
+// Add click event listener to reset button
+resetButton.addEventListener("click", () => {
+  const wordContainers = document.querySelectorAll(".word-container");
+  resetGame(wordContainers, guessedWords);
 });
