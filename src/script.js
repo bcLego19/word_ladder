@@ -25,12 +25,23 @@ function checkGuess(wordContainer, targetWord) {
     }
   }
   if (guess.toUpperCase() === targetWord) {
+    const wordIndex = wordContainer.dataset.index;
+    guessedWords[wordIndex] = true;
     wordContainer.classList.add("correct"); // Mark the guess as correct visually
-    targetWordDisplay.textContent += ` ${targetWord}`; // Add guessed word to target word display
-    document.getElementById(`guess-button-${wordContainer.dataset.index}`).disabled = true; // Disable guess button using ID
+    targetWordDisplay.textContent += ` ${targetWord}`;
+    document.getElementById(`guess-button-${wordIndex}`).disabled = true; // Disable guess button using ID
+    checkWinCondition(guessedWords); // Check for win condition after a correct guess
   } else {
     alert("Incorrect guess. Try again!");
   }
+}
+
+function checkWinCondition(guessedWords) {
+    // Check if all elements in guessedWords are true
+    if (guessedWords.every(wordGuessed => wordGuessed === true)) {
+      alert("Congratulations! You guessed all the words!");
+      // Add any additional logic for handling a win (e.g., disable buttons, display win message)
+    }
 }
 
 // Function to swap the position of two word containers
@@ -38,6 +49,16 @@ function swapWords(container1, container2) {
   const temp = container1.parentNode.replaceChild(container2, container1);
   container1.parentNode.insertBefore(temp, container2);
 }
+
+// Function to check for win condition
+function checkWinCondition(guessedWords) {
+    if (guessedWords.every(wordGuessed => wordGuessed === true)) {
+      alert("Congratulations! You guessed all the words!");
+      // Add any additional logic for handling a win (e.g., disable buttons, display win message)
+    }
+}
+
+let guessedWords = new Array(targetWords.length).fill(false); // Create array with false values
 
 // Loop through each target word and create elements
 targetWords.forEach((word, index) => {
